@@ -6,13 +6,16 @@ using namespace std;
 class Matrix {
 public:
     //default constructor
-    Matrix() = default;
-
-    Matrix(int new_rows, int new_cols) {
-        Resize(new_rows, new_cols);
+    Matrix() {
+        num_cols = 0;
+        num_rows = 0;
     }
 
-    void Resize(int new_rows, int new_cols) {
+    Matrix(int new_rows, int new_cols) {
+        Reset(new_rows, new_cols);
+    }
+
+    void Reset(int new_rows, int new_cols) {
         if (new_rows >= 0 && new_cols >= 0) {
             num_rows = new_rows;
             num_cols = new_cols;
@@ -30,7 +33,7 @@ public:
         }
     }
 
-    [[nodiscard]] int &At(int row, int col) {
+    int &At(int row, int col) {
         if (row >= 0 && col >= 0 && num_rows > row && num_cols > col) {
             return data[row][col];
         } else {
@@ -38,11 +41,11 @@ public:
         }
     }
 
-    [[nodiscard]] int GetNumRows() const {
+    int GetNumRows() const {
         return num_rows;
     }
 
-    [[nodiscard]] int GetNumCols() const {
+    int GetNumColumns() const {
         return num_cols;
     }
 
@@ -85,7 +88,7 @@ private:
 istream &operator>>(istream &in, Matrix &matrix) {
     int num_rows, num_cols;
     in >> num_rows >> num_cols;
-    matrix.Resize(num_rows, num_cols);
+    matrix.Reset(num_rows, num_cols);
     for (auto &row: matrix.data) {
         for (auto &el: row) {
             in >> el;
@@ -104,7 +107,6 @@ ostream &operator<<(ostream &out, const Matrix &matrix) {
     }
     return out;
 }
-
 
 int main() {
     Matrix one;
