@@ -3,4 +3,5 @@ project(Course_c__)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(Course_c__ mass_of_blocks.cpp)
+add_subdirectory(01_exercise)
+add_subdirectory(02_exercise)
