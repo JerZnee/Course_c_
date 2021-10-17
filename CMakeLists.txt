@@ -3,4 +3,4 @@ project(Course_c__)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(Course_c__ matrix_sum.cpp.cpp)
+add_executable(Course_c__ mass_of_blocks.cpp)
