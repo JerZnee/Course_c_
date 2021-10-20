@@ -1,64 +1,97 @@
-#include <vector>
-#include <algorithm>
-#include <set>
+//The "Base of Regions" task.
+// The FindMaxRepetitionCount function, which accepts a region base and determines what maximum number
+// of repetitions (number of occurrences of the same element) it contains.
+// Two records (objects of Region type) are considered different if they differ by at least one field.
+
 #include <iostream>
+#include <string>
 #include <map>
-#include <unordered_map>
-#include <unordered_set>
-#include <limits>
-#include <deque>
-#include <stack>
-#include <list>
+#include <vector>
 
 using namespace std;
 
-void solve() {
-    int n;
-    deque<pair<int, bool>> a;
-    cin >> n;
-    a.resize(n);
-    for(auto&el: a){
-        char t;
-        cin >> t;
-        cin >> el.first;
-        el.second = t == 'y';
+enum class Lang {
+    DE, FR, IT
+};
+
+struct Region {
+    string std_name;
+    string parent_std_name;
+    map<Lang, string> names;
+    int64_t population;
+};
+
+int FindMaxRepetitionCount(const vector<Region>& regions){
+    if(regions.empty()) { return 0; }
+    map<tuple<string, string, map<Lang, string>, int64_t>, int> y;
+    for(auto &reg: regions) {
+        y[tie(reg.std_name, reg.parent_std_name, reg.names, reg.population)] ++;
     }
-
-    while(!a.empty() && !a.front().second) a.pop_front();
-    while(!a.empty() && !a.back().second) a.pop_back();
-
-    if(a.empty()){
-        cout << 0 << endl;
-        return;
+    int count = 1;
+    for(const auto &item: y){
+        count = max(count, item.second);
     }
-
-    int ans = 1;
-    int y_min=numeric_limits<int>::max(), n_max = -1;
-
-    bool skip = false;
-
-    for(auto &[sze, to_del]: a){
-        if(to_del){
-            skip = false;
-            y_min = min(y_min, sze);
-        } else{
-            if(skip) continue;
-            n_max = max(n_max, sze);
-        }
-        if(n_max >= y_min){
-            ans++;
-            n_max = -1;
-            y_min = numeric_limits<int>::max();
-            skip = true;
-        } else{
-            skip = false;
-        }
-    }
-
-    cout << ans << endl;
+    return count;
 }
 
 int main() {
-    solve();
+    cout << FindMaxRepetitionCount({
+                                           {
+                                                   "Moscow",
+                                                   "Russia",
+                                                   {{Lang::DE, "Moskau"}, {Lang::FR, "Moscou"}, {Lang::IT, "Mosca"}},
+                                                   89
+                                           }, {
+                                                   "Russia",
+                                                   "Eurasia",
+                                                   {{Lang::DE, "Russland"}, {Lang::FR, "Russie"}, {Lang::IT, "Russia"}},
+                                                   89
+                                           }, {
+                                                   "Moscow",
+                                                   "Russia",
+                                                   {{Lang::DE, "Moskau"}, {Lang::FR, "Moscou"}, {Lang::IT, "Mosca"}},
+                                                   89
+                                           }, {
+                                                   "Moscow",
+                                                   "Russia",
+                                                   {{Lang::DE, "Moskau"}, {Lang::FR, "Moscou"}, {Lang::IT, "Mosca"}},
+                                                   89
+                                           }, {
+                                                   "Russia",
+                                                   "Eurasia",
+                                                   {{Lang::DE, "Russland"}, {Lang::FR, "Russie"}, {Lang::IT, "Russia"}},
+                                                   89
+                                           },
+                                   }) << endl;
+
+    cout << FindMaxRepetitionCount({
+                                           {
+                                                   "Moscow",
+                                                   "Russia",
+                                                   {{Lang::DE, "Moskau"}, {Lang::FR, "Moscou"}, {Lang::IT, "Mosca"}},
+                                                   89
+                                           }, {
+                                                   "Russia",
+                                                   "Eurasia",
+                                                   {{Lang::DE, "Russland"}, {Lang::FR, "Russie"}, {Lang::IT, "Russia"}},
+                                                   89
+                                           }, {
+                                                   "Moscow",
+                                                   "Russia",
+                                                   {{Lang::DE, "Moskau"}, {Lang::FR, "Moscou deux"}, {Lang::IT, "Mosca"}},
+                                                   89
+                                           }, {
+                                                   "Moscow",
+                                                   "Toulouse",
+                                                   {{Lang::DE, "Moskau"}, {Lang::FR, "Moscou"}, {Lang::IT, "Mosca"}},
+                                                   89
+                                           }, {
+                                                   "Moscow",
+                                                   "Russia",
+                                                   {{Lang::DE, "Moskau"}, {Lang::FR, "Moscou"}, {Lang::IT, "Mosca"}},
+                                                   31
+                                           },
+                                   }) << endl;
+
     return 0;
 }
