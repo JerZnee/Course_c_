@@ -76,7 +76,6 @@ public:
             // По условию в словарях не должно быть нулей
             RemoveZeros(updated_tasks);
             RemoveZeros(untouched_tasks);
-
             return {updated_tasks, untouched_tasks};
     }
 
